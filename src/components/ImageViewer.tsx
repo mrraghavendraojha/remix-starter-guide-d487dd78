@@ -73,6 +73,23 @@ export const ImageViewer = ({ images, initialIndex, isOpen, onClose }: ImageView
     setIsDragging(false);
   };
 
+  const handleWheel = (e: React.WheelEvent) => {
+    // Only zoom if Ctrl key is pressed
+    if (e.ctrlKey) {
+      e.preventDefault();
+      
+      const zoomDelta = e.deltaY > 0 ? -0.1 : 0.1;
+      const newZoom = Math.min(Math.max(zoom + zoomDelta, 0.5), 3);
+      
+      setZoom(newZoom);
+      
+      // Reset position if zooming out to 1 or below
+      if (newZoom <= 1) {
+        setPosition({ x: 0, y: 0 });
+      }
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none [&>button]:text-white [&>button]:hover:bg-white/20">
@@ -138,6 +155,7 @@ export const ImageViewer = ({ images, initialIndex, isOpen, onClose }: ImageView
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseLeave}
+          onWheel={handleWheel}
           style={{ 
             cursor: zoom > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default',
             touchAction: 'none'
