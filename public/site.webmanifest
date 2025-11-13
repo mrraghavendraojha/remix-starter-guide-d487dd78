@@ -1,0 +1,41 @@
+{
+  "name": "CommunityShare",
+  "short_name": "CommunityShare",
+  "description": "Buy, sell, rent, and donate within your community",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1fa7a7",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["shopping", "lifestyle", "social"],
+  "shortcuts": [
+    {
+      "name": "Browse Listings",
+      "short_name": "Browse",
+      "description": "View available items in your community",
+      "url": "/?page=home",
+      "icons": []
+    },
+    {
+      "name": "Create Listing",
+      "short_name": "Create",
+      "description": "List a new item",
+      "url": "/?page=create",
+      "icons": []
+    },
+    {
+      "name": "Messages",
+      "short_name": "Messages",
+      "description": "Check your messages",
+      "url": "/?page=messages",
+      "icons": []
+    }
+  ]
+}
