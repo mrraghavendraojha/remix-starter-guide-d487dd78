@@ -72,6 +72,8 @@ export default {
         'card-gradient': 'var(--card-gradient)',
         'hero-gradient': 'var(--hero-gradient)',
         'glass-gradient': 'var(--glass-gradient)',
+        'premium-gradient': 'var(--premium-gradient)',
+        'accent-gradient': 'var(--accent-gradient)',
       },
       boxShadow: {
         'soft': 'var(--shadow-soft)',
@@ -79,11 +81,13 @@ export default {
         'community': 'var(--shadow-community)',
         'hover': 'var(--shadow-hover)',
         'glow': 'var(--shadow-glow)',
+        'premium': 'var(--shadow-premium)',
       },
       transitionProperty: {
         'smooth': 'var(--transition-smooth)',
         'bounce': 'var(--transition-bounce)',
         'spring': 'var(--transition-spring)',
+        'elegant': 'var(--transition-elegant)',
       },
       spacing: {
         '18': '4.5rem',

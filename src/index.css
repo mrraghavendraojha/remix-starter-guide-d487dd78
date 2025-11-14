@@ -8,57 +8,61 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 220 20% 12%;
+    --background: 0 0% 99%;
+    --foreground: 222 25% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 20% 12%;
+    --card-foreground: 222 25% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 12%;
+    --popover-foreground: 222 25% 10%;
 
-    --primary: 189 88% 38%;
+    --primary: 195 92% 42%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 43 95% 58%;
-    --secondary-foreground: 220 20% 12%;
+    --secondary: 40 96% 62%;
+    --secondary-foreground: 222 25% 10%;
 
-    --muted: 220 15% 95%;
-    --muted-foreground: 220 10% 46%;
+    --muted: 220 18% 96%;
+    --muted-foreground: 222 15% 48%;
 
-    --accent: 189 75% 90%;
-    --accent-foreground: 189 88% 28%;
+    --accent: 195 85% 92%;
+    --accent-foreground: 195 92% 30%;
 
-    --destructive: 0 72% 58%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 15% 90%;
-    --input: 220 15% 94%;
-    --ring: 189 88% 38%;
+    --border: 220 18% 88%;
+    --input: 220 18% 92%;
+    --ring: 195 92% 42%;
 
-    --success: 142 76% 46%;
+    --success: 142 82% 48%;
     --success-foreground: 0 0% 100%;
     
-    --warning: 38 92% 50%;
+    --warning: 36 94% 54%;
     --warning-foreground: 0 0% 100%;
 
-    --community-gradient: linear-gradient(135deg, hsl(189 88% 38%), hsl(189 80% 52%));
-    --warm-gradient: linear-gradient(135deg, hsl(43 95% 58%), hsl(37 100% 66%));
-    --card-gradient: linear-gradient(135deg, hsl(0 0% 100%), hsl(189 75% 98%));
-    --hero-gradient: linear-gradient(135deg, hsl(189 95% 40%) 0%, hsl(189 85% 50%) 50%, hsl(189 75% 60%) 100%);
-    --glass-gradient: linear-gradient(135deg, hsl(0 0% 100% / 0.7), hsl(189 70% 98% / 0.6));
+    --community-gradient: linear-gradient(135deg, hsl(195 92% 42%) 0%, hsl(195 88% 52%) 50%, hsl(195 85% 62%) 100%);
+    --warm-gradient: linear-gradient(135deg, hsl(40 96% 62%) 0%, hsl(35 98% 68%) 100%);
+    --card-gradient: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(195 80% 98%) 100%);
+    --hero-gradient: linear-gradient(135deg, hsl(195 95% 38%) 0%, hsl(195 88% 48%) 50%, hsl(195 82% 58%) 100%);
+    --glass-gradient: linear-gradient(135deg, hsl(0 0% 100% / 0.85), hsl(195 75% 98% / 0.75));
+    --premium-gradient: linear-gradient(135deg, hsl(222 15% 12%) 0%, hsl(222 18% 18%) 50%, hsl(222 20% 25%) 100%);
+    --accent-gradient: linear-gradient(135deg, hsl(195 92% 42%) 0%, hsl(270 88% 58%) 100%);
     
-    --shadow-soft: 0 2px 12px -2px hsl(220 20% 12% / 0.06);
-    --shadow-card: 0 4px 20px -4px hsl(220 20% 12% / 0.08);
-    --shadow-community: 0 8px 28px -6px hsl(189 88% 38% / 0.15);
-    --shadow-hover: 0 12px 36px -8px hsl(189 88% 38% / 0.22);
-    --shadow-glow: 0 0 40px hsl(189 88% 38% / 0.18);
+    --shadow-soft: 0 2px 16px -4px hsl(222 25% 10% / 0.08);
+    --shadow-card: 0 4px 24px -6px hsl(222 25% 10% / 0.12);
+    --shadow-community: 0 8px 32px -8px hsl(195 92% 42% / 0.20);
+    --shadow-hover: 0 12px 40px -10px hsl(195 92% 42% / 0.28);
+    --shadow-glow: 0 0 48px hsl(195 92% 42% / 0.24);
+    --shadow-premium: 0 20px 60px -15px hsl(222 25% 10% / 0.20);
     
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    --transition-spring: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    --transition-smooth: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.45s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --transition-spring: all 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+    --transition-elegant: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 
-    --radius: 0.875rem;
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -78,51 +82,54 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222 30% 8%;
-    --foreground: 210 40% 98%;
+    --background: 222 35% 6%;
+    --foreground: 210 45% 98%;
 
-    --card: 222 28% 10%;
-    --card-foreground: 210 40% 98%;
+    --card: 222 32% 9%;
+    --card-foreground: 210 45% 98%;
 
-    --popover: 222 28% 10%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 222 32% 9%;
+    --popover-foreground: 210 45% 98%;
 
-    --primary: 189 85% 65%;
-    --primary-foreground: 222 30% 8%;
+    --primary: 195 88% 68%;
+    --primary-foreground: 222 35% 6%;
 
-    --secondary: 43 92% 60%;
-    --secondary-foreground: 222 30% 8%;
+    --secondary: 40 94% 64%;
+    --secondary-foreground: 222 35% 6%;
 
-    --muted: 222 25% 16%;
-    --muted-foreground: 220 15% 65%;
+    --muted: 222 28% 14%;
+    --muted-foreground: 220 18% 68%;
 
-    --accent: 189 80% 25%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 195 82% 22%;
+    --accent-foreground: 210 45% 98%;
 
-    --destructive: 0 68% 58%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 62%;
+    --destructive-foreground: 210 45% 98%;
 
-    --border: 222 25% 18%;
-    --input: 222 25% 16%;
-    --ring: 189 85% 65%;
+    --border: 222 28% 16%;
+    --input: 222 28% 14%;
+    --ring: 195 88% 68%;
 
-    --success: 142 70% 50%;
-    --success-foreground: 222 30% 8%;
+    --success: 142 76% 52%;
+    --success-foreground: 222 35% 6%;
     
-    --warning: 38 90% 55%;
-    --warning-foreground: 222 30% 8%;
+    --warning: 36 92% 58%;
+    --warning-foreground: 222 35% 6%;
 
-    --community-gradient: linear-gradient(135deg, hsl(189 85% 65%), hsl(189 75% 52%));
-    --warm-gradient: linear-gradient(135deg, hsl(43 92% 60%), hsl(37 95% 65%));
-    --card-gradient: linear-gradient(135deg, hsl(222 28% 10% / 0.95), hsl(189 70% 15% / 0.85));
-    --hero-gradient: linear-gradient(135deg, hsl(189 90% 45%) 0%, hsl(189 80% 55%) 50%, hsl(189 70% 62%) 100%);
-    --glass-gradient: linear-gradient(135deg, hsl(222 28% 12% / 0.8), hsl(189 70% 15% / 0.7));
+    --community-gradient: linear-gradient(135deg, hsl(195 88% 68%) 0%, hsl(195 85% 58%) 50%, hsl(195 80% 48%) 100%);
+    --warm-gradient: linear-gradient(135deg, hsl(40 94% 64%) 0%, hsl(35 96% 68%) 100%);
+    --card-gradient: linear-gradient(135deg, hsl(222 32% 9% / 0.98), hsl(195 75% 12% / 0.90));
+    --hero-gradient: linear-gradient(135deg, hsl(195 92% 42%) 0%, hsl(195 88% 52%) 50%, hsl(195 82% 62%) 100%);
+    --glass-gradient: linear-gradient(135deg, hsl(222 32% 11% / 0.85), hsl(195 75% 14% / 0.75));
+    --premium-gradient: linear-gradient(135deg, hsl(222 35% 8%) 0%, hsl(222 32% 12%) 50%, hsl(222 28% 18%) 100%);
+    --accent-gradient: linear-gradient(135deg, hsl(195 88% 68%) 0%, hsl(270 85% 65%) 100%);
     
-    --shadow-soft: 0 2px 12px -2px hsl(0 0% 0% / 0.3);
-    --shadow-card: 0 4px 20px -4px hsl(0 0% 0% / 0.4);
-    --shadow-community: 0 8px 28px -6px hsl(189 85% 65% / 0.25);
-    --shadow-hover: 0 12px 36px -8px hsl(189 85% 65% / 0.35);
-    --shadow-glow: 0 0 40px hsl(189 85% 65% / 0.25);
+    --shadow-soft: 0 2px 16px -4px hsl(0 0% 0% / 0.35);
+    --shadow-card: 0 4px 24px -6px hsl(0 0% 0% / 0.45);
+    --shadow-community: 0 8px 32px -8px hsl(195 88% 68% / 0.30);
+    --shadow-hover: 0 12px 40px -10px hsl(195 88% 68% / 0.40);
+    --shadow-glow: 0 0 48px hsl(195 88% 68% / 0.30);
+    --shadow-premium: 0 20px 60px -15px hsl(0 0% 0% / 0.50);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -147,7 +154,27 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground select-none antialiased;
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'rlig' 1, 'calt' 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .premium-text {
+    background: var(--premium-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+  }
+
+  .backdrop-blur-premium {
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
   }
 
   /* Performance optimizations */
