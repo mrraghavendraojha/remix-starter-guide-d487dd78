@@ -35,15 +35,287 @@ export type Database = {
         }
         Relationships: []
       }
+      conversations: {
+        Row: {
+          buyer_id: string
+          created_at: string | null
+          id: string
+          listing_id: string
+          seller_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          buyer_id: string
+          created_at?: string | null
+          id?: string
+          listing_id: string
+          seller_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          buyer_id?: string
+          created_at?: string | null
+          id?: string
+          listing_id?: string
+          seller_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_buyer_id_fkey"
+            columns: ["buyer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "conversations_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      favorites: {
+        Row: {
+          created_at: string | null
+          id: string
+          listing_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          listing_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          listing_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listings: {
+        Row: {
+          available_from: string | null
+          available_to: string | null
+          category: string
+          condition: Database["public"]["Enums"]["listing_condition"]
+          created_at: string | null
+          deposit: number | null
+          description: string
+          id: string
+          images: string[] | null
+          is_active: boolean | null
+          location: string
+          price: number | null
+          rent_period: string | null
+          title: string
+          type: Database["public"]["Enums"]["listing_type"]
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          available_from?: string | null
+          available_to?: string | null
+          category: string
+          condition: Database["public"]["Enums"]["listing_condition"]
+          created_at?: string | null
+          deposit?: number | null
+          description: string
+          id?: string
+          images?: string[] | null
+          is_active?: boolean | null
+          location: string
+          price?: number | null
+          rent_period?: string | null
+          title: string
+          type: Database["public"]["Enums"]["listing_type"]
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          available_from?: string | null
+          available_to?: string | null
+          category?: string
+          condition?: Database["public"]["Enums"]["listing_condition"]
+          created_at?: string | null
+          deposit?: number | null
+          description?: string
+          id?: string
+          images?: string[] | null
+          is_active?: boolean | null
+          location?: string
+          price?: number | null
+          rent_period?: string | null
+          title?: string
+          type?: Database["public"]["Enums"]["listing_type"]
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string | null
+          id: string
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string | null
+          id?: string
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string | null
+          id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          block: string
+          created_at: string | null
+          hostel_name: string | null
+          id: string
+          name: string
+          phone: string | null
+          rating: number | null
+          room_number: string | null
+          total_ratings: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          block: string
+          created_at?: string | null
+          hostel_name?: string | null
+          id?: string
+          name: string
+          phone?: string | null
+          rating?: number | null
+          room_number?: string | null
+          total_ratings?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          block?: string
+          created_at?: string | null
+          hostel_name?: string | null
+          id?: string
+          name?: string
+          phone?: string | null
+          rating?: number | null
+          room_number?: string | null
+          total_ratings?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ratings: {
+        Row: {
+          created_at: string | null
+          id: string
+          listing_id: string | null
+          rated_user_id: string
+          rater_id: string
+          rating: number
+          review: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          listing_id?: string | null
+          rated_user_id: string
+          rater_id: string
+          rating: number
+          review?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          listing_id?: string | null
+          rated_user_id?: string
+          rater_id?: string
+          rating?: number
+          review?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ratings_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      can_view_contact_details: {
+        Args: { _profile_user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      listing_condition: "new" | "good" | "used"
+      listing_type: "sell" | "rent" | "donate"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -170,6 +442,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      listing_condition: ["new", "good", "used"],
+      listing_type: ["sell", "rent", "donate"],
+    },
   },
 } as const
