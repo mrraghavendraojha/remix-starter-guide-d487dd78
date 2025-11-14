@@ -1,15 +1,23 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Home, Plus, MessageCircle, User, Heart, Settings as SettingsIcon } from "lucide-react";
+import { Home, Plus, MessageCircle, User, Heart, Settings as SettingsIcon, ArrowLeft } from "lucide-react";
 import { haptics } from "@/lib/haptics";
 
 interface NavigationProps {
   currentPage?: string;
   onPageChange?: (page: string) => void;
   onOpenSettings?: () => void;
+  onNavigateBack?: () => void;
+  canNavigateBack?: boolean;
 }
 
-export const Navigation = ({ currentPage = "home", onPageChange, onOpenSettings }: NavigationProps) => {
+export const Navigation = ({ 
+  currentPage = "home", 
+  onPageChange, 
+  onOpenSettings,
+  onNavigateBack,
+  canNavigateBack = false
+}: NavigationProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
@@ -28,6 +36,11 @@ export const Navigation = ({ currentPage = "home", onPageChange, onOpenSettings 
   const handleSettingsClick = () => {
     haptics.medium();
     onOpenSettings?.();
+  };
+
+  const handleBackClick = () => {
+    haptics.light();
+    onNavigateBack?.();
   };
 
   return (
@@ -78,14 +91,27 @@ export const Navigation = ({ currentPage = "home", onPageChange, onOpenSettings 
 
       {/* Mobile Header */}
       <header className="lg:hidden flex items-center justify-between px-2 py-1.5 bg-card/80 backdrop-blur-md shadow-card border-b sticky top-0 z-40">
-        <div className="flex items-center space-x-1.5">
-          <div className="w-6 h-6 bg-community-gradient rounded-lg flex items-center justify-center shadow-soft">
-            <Home className="h-3 w-3 text-white" />
-          </div>
-          <div>
-            <h1 className="text-xs font-bold bg-community-gradient bg-clip-text text-transparent leading-tight">
-              Market
-            </h1>
+        <div className="flex items-center space-x-2">
+          {canNavigateBack && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleBackClick}
+              className="rounded-full h-8 w-8"
+              aria-label="Go back"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          )}
+          <div className="flex items-center space-x-1.5">
+            <div className="w-6 h-6 bg-community-gradient rounded-lg flex items-center justify-center shadow-soft">
+              <Home className="h-3 w-3 text-white" />
+            </div>
+            <div>
+              <h1 className="text-xs font-bold bg-community-gradient bg-clip-text text-transparent leading-tight">
+                Market
+              </h1>
+            </div>
           </div>
         </div>
         

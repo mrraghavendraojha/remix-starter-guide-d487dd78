@@ -335,6 +335,8 @@ const Index = () => {
           currentPage={currentPage} 
           onPageChange={handlePageChange}
           onOpenSettings={() => setShowSettings(true)}
+          onNavigateBack={navigateBack}
+          canNavigateBack={navigationHistory.length > 1}
         />
       )}
       
