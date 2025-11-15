@@ -16,6 +16,7 @@ export const ImageViewer = ({ images, initialIndex, isOpen, onClose }: ImageView
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [lastTouchDistance, setLastTouchDistance] = useState(0);
 
   const handleZoomIn = () => {
     setZoom(prev => Math.min(prev + 0.5, 3));
@@ -90,6 +91,54 @@ export const ImageViewer = ({ images, initialIndex, isOpen, onClose }: ImageView
     }
   };
 
+  const getTouchDistance = (touches: React.TouchList) => {
+    const touch1 = touches[0];
+    const touch2 = touches[1];
+    const dx = touch1.clientX - touch2.clientX;
+    const dy = touch1.clientY - touch2.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      setLastTouchDistance(getTouchDistance(e.touches));
+    } else if (e.touches.length === 1 && zoom > 1) {
+      setIsDragging(true);
+      setDragStart({
+        x: e.touches[0].clientX - position.x,
+        y: e.touches[0].clientY - position.y
+      });
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const currentDistance = getTouchDistance(e.touches);
+      if (lastTouchDistance > 0) {
+        const scale = currentDistance / lastTouchDistance;
+        const newZoom = Math.min(Math.max(zoom * scale, 0.5), 3);
+        setZoom(newZoom);
+        if (newZoom <= 1) {
+          setPosition({ x: 0, y: 0 });
+        }
+      }
+      setLastTouchDistance(currentDistance);
+    } else if (e.touches.length === 1 && isDragging && zoom > 1) {
+      e.preventDefault();
+      setPosition({
+        x: e.touches[0].clientX - dragStart.x,
+        y: e.touches[0].clientY - dragStart.y
+      });
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    setLastTouchDistance(0);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none [&>button]:text-white [&>button]:hover:bg-white/20">
@@ -150,12 +199,15 @@ export const ImageViewer = ({ images, initialIndex, isOpen, onClose }: ImageView
 
         {/* Image Container */}
         <div 
-          className="w-full h-[95vh] overflow-hidden flex items-center justify-center touch-none"
+          className="w-full h-[95vh] overflow-hidden flex items-center justify-center"
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseLeave}
           onWheel={handleWheel}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           style={{ 
             cursor: zoom > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default',
             touchAction: 'none'
