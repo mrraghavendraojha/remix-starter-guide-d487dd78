@@ -42,12 +42,15 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
   const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
+    messagesEndRef.current?.scrollIntoView({ behavior });
   };
 
   useEffect(() => {
-    scrollToBottom();
+    // Smooth scroll on new messages
+    if (messages.length > 0) {
+      scrollToBottom("smooth");
+    }
   }, [messages]);
 
   const fetchConversationDetails = async () => {
@@ -124,6 +127,8 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
       });
     } finally {
       setLoading(false);
+      // On initial load, jump to bottom without animation
+      setTimeout(() => scrollToBottom("auto"), 0);
     }
   };
 
@@ -168,7 +173,6 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
       return;
     }
     
-    // Open phone dialer
     window.location.href = `tel:${conversationDetails.other_user_phone}`;
   };
 
@@ -203,7 +207,6 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
     return !isSameDay(currentDate, previousDate);
   };
 
-  // Mark messages as read when viewing conversation
   const markMessagesAsRead = async () => {
     if (!conversationId || !user) return;
     
@@ -212,7 +215,6 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
     );
     
     if (unreadMessages.length > 0) {
-      // Note: This will work once read_at column is added via migration
       await supabase
         .from('messages')
         .update({ read_at: new Date().toISOString() } as any)
@@ -220,16 +222,15 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
     }
   };
 
-  // Fetch conversation details and messages on mount
   useEffect(() => {
     if (conversationId && user) {
       fetchConversationDetails();
       fetchMessages();
       markMessagesAsRead();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationId, user]);
 
-  // Real-time message subscription
   useEffect(() => {
     if (!conversationId) return;
 
@@ -246,7 +247,6 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
         async (payload) => {
           const newMessage = payload.new as any;
           
-          // Fetch sender name
           const { data: senderData } = await supabase
             .from('profiles')
             .select('name')
@@ -262,7 +262,6 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
           };
 
           setMessages(prev => [...prev, messageWithSender]);
-          // Notification is handled by global useMessageNotifications hook
         }
       )
       .subscribe();
@@ -273,13 +272,23 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
   }, [conversationId]);
 
   if (loading || !conversationDetails) {
-    return <div className="flex items-center justify-center h-full">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-full">
+        Loading...
+      </div>
+    );
   }
 
   return (
-    <div className="h-full bg-background flex flex-col overflow-hidden">
-      {/* Header */}
-      <div className="flex-shrink-0 bg-background border-b border-border p-2 md:p-4">
+    <div
+      className="bg-background flex flex-col overflow-hidden"
+      style={{
+        height: "100dvh",          // mobile-safe viewport height
+        maxHeight: "100dvh",
+      }}
+    >
+      {/* Header (always visible, like WhatsApp) */}
+      <div className="flex-shrink-0 bg-background border-b border-border p-2 md:p-4 z-20">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2 md:space-x-3">
             <Button variant="ghost" size="icon" className="h-8 w-8 md:h-10 md:w-10" onClick={onBack}>
@@ -293,7 +302,9 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
             </Avatar>
             
             <div className="flex-1">
-              <h2 className="font-semibold text-foreground text-sm md:text-base">{conversationDetails.other_user_name}</h2>
+              <h2 className="font-semibold text-foreground text-sm md:text-base">
+                {conversationDetails.other_user_name}
+              </h2>
               <div className="flex items-center space-x-0.5 md:space-x-1 text-[10px] md:text-xs text-muted-foreground">
                 <MapPin className="h-2.5 w-2.5 md:h-3 md:w-3" />
                 <span>{conversationDetails.other_user_block}</span>
@@ -308,7 +319,12 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
           </div>
           
           <div className="flex items-center space-x-1 md:space-x-2">
-            <Button variant="ghost" size="icon" className="h-7 w-7 md:h-10 md:w-10" onClick={handlePhoneCall}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 md:h-10 md:w-10"
+              onClick={handlePhoneCall}
+            >
               <Phone className="h-3 w-3 md:h-4 md:w-4" />
             </Button>
             <Button variant="ghost" size="icon" className="h-7 w-7 md:h-10 md:w-10">
@@ -329,8 +345,11 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
         </Card>
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-2 md:p-4 min-h-0 overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
+      {/* Messages (only this scrolls) */}
+      <div
+        className="flex-1 min-h-0 overflow-y-auto p-2 md:p-4"
+        style={{ WebkitOverflowScrolling: "touch" }}
+      >
         <div className="space-y-2 md:space-y-4">
           {messages.map((message, index) => {
             const isCurrentUser = message.sender_id === user?.id;
@@ -350,10 +369,8 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
                   </div>
                 )}
 
-                {/* Message */}
-                <div
-                  className={`flex ${isCurrentUser ? "justify-end" : "justify-start"}`}
-                >
+                {/* Message bubble */}
+                <div className={`flex ${isCurrentUser ? "justify-end" : "justify-start"}`}>
                   <div className={`max-w-[80%] md:max-w-[75%] ${isCurrentUser ? "order-2" : "order-1"}`}>
                     <div
                       className={`px-2.5 md:px-4 py-1.5 md:py-2 rounded-2xl ${
@@ -366,9 +383,11 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
                         {message.content}
                       </p>
                     </div>
-                    <div className={`mt-0.5 md:mt-1 flex items-center space-x-1 ${
-                      isCurrentUser ? "justify-end" : "justify-start"
-                    }`}>
+                    <div
+                      className={`mt-0.5 md:mt-1 flex items-center space-x-1 ${
+                        isCurrentUser ? "justify-end" : "justify-start"
+                      }`}
+                    >
                       <span className="text-[10px] md:text-xs text-muted-foreground">
                         {formatTimestamp(message.created_at)}
                       </span>
@@ -382,8 +401,13 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
         </div>
       </div>
 
-      {/* Message Input */}
-      <div className="flex-shrink-0 bg-background border-t border-border p-2 md:p-4" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
+      {/* Message Input – fixed at bottom, above keyboard */}
+      <div
+        className="flex-shrink-0 bg-background border-t border-border p-2 md:p-4"
+        style={{
+          paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))',
+        }}
+      >
         <div className="flex items-end space-x-1.5 md:space-x-2">
           <div className="flex-1 min-w-0">
             <Input
