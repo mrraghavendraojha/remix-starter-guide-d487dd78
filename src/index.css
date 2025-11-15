@@ -189,11 +189,6 @@ All colors MUST be HSL.
     border-radius: 0.25rem;
   }
 
-  /* Safe area support for Android/iOS */
-  .safe-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
   /* GPU acceleration for transforms */
   .transition-smooth, .transition-bounce, .transition-spring {
     will-change: transform, opacity;

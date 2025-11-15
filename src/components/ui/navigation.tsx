@@ -127,15 +127,15 @@ export const Navigation = ({
       </header>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t shadow-glow z-50 safe-bottom">
-        <div className="flex items-center justify-around px-0.5 py-2 pb-3">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t shadow-glow z-50">
+        <div className="flex items-center justify-around px-0.5 py-0.5">
           {navItems.map((item) => (
             <Button
               key={item.id}
               variant="ghost"
               size="sm"
               onClick={() => handlePageChange(item.id)}
-              className={`flex flex-col items-center space-y-1 h-auto py-1.5 px-1 transition-spring rounded-lg relative ${
+              className={`flex flex-col items-center space-y-0 h-10 px-1 transition-spring rounded-lg relative ${
                 currentPage === item.id 
                   ? "text-primary bg-primary/10" 
                   : "text-muted-foreground hover:text-foreground"
@@ -145,8 +145,8 @@ export const Navigation = ({
               {currentPage === item.id && (
                 <span className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-primary rounded-b-full"></span>
               )}
-              <item.icon className={`h-5 w-5 ${currentPage === item.id ? "scale-110" : ""} transition-spring`} />
-              <span className="text-[10px] font-medium leading-tight">{item.label}</span>
+              <item.icon className={`h-4 w-4 ${currentPage === item.id ? "scale-110" : ""} transition-spring`} />
+              <span className="text-[9px] font-medium">{item.label}</span>
             </Button>
           ))}
         </div>
