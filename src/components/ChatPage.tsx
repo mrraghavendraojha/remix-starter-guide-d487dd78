@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ArrowLeft, Send, Phone, MoreVertical, Calendar, MapPin } from "lucide-react";
 import { format, isToday, isYesterday, isSameDay, parseISO } from "date-fns";
+import { Keyboard } from '@capacitor/keyboard';
 
 interface ChatPageProps {
   conversationId: string;
@@ -40,6 +41,7 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [conversationDetails, setConversationDetails] = useState<ConversationDetails | null>(null);
   const [loading, setLoading] = useState(true);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -229,6 +231,22 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
     }
   }, [conversationId, user]);
 
+  // Handle keyboard show/hide on mobile
+  useEffect(() => {
+    const showListener = Keyboard.addListener('keyboardWillShow', info => {
+      setKeyboardHeight(info.keyboardHeight);
+    });
+
+    const hideListener = Keyboard.addListener('keyboardWillHide', () => {
+      setKeyboardHeight(0);
+    });
+
+    return () => {
+      showListener.then(l => l.remove());
+      hideListener.then(l => l.remove());
+    };
+  }, []);
+
   // Real-time message subscription
   useEffect(() => {
     if (!conversationId) return;
@@ -383,7 +401,13 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
       </div>
 
       {/* Message Input */}
-      <div className="flex-shrink-0 bg-background border-t border-border p-2 md:p-4" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
+      <div 
+        className="flex-shrink-0 bg-background border-t border-border p-2 md:p-4 transition-all duration-200" 
+        style={{ 
+          paddingBottom: keyboardHeight > 0 ? `${keyboardHeight + 8}px` : 'max(0.5rem, env(safe-area-inset-bottom))',
+          marginBottom: keyboardHeight > 0 ? '0' : 'env(safe-area-inset-bottom)'
+        }}
+      >
         <div className="flex items-end space-x-1.5 md:space-x-2">
           <div className="flex-1 min-w-0">
             <Input
