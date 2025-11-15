@@ -277,7 +277,7 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
   }
 
   return (
-    <div className="h-full bg-background flex flex-col">
+    <div className="h-full bg-background flex flex-col overflow-hidden">
       {/* Header */}
       <div className="flex-shrink-0 bg-background border-b border-border p-2 md:p-4">
         <div className="flex items-center justify-between">
@@ -330,7 +330,7 @@ export const ChatPage = ({ conversationId, onBack }: ChatPageProps) => {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-2 md:p-4 min-h-0" style={{ WebkitOverflowScrolling: 'touch' }}>
+      <div className="flex-1 overflow-y-auto p-2 md:p-4 min-h-0 overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
         <div className="space-y-2 md:space-y-4">
           {messages.map((message, index) => {
             const isCurrentUser = message.sender_id === user?.id;
