@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X, ZoomIn, ZoomOut, ChevronLeft, ChevronRight } from "lucide-react";
@@ -16,6 +16,7 @@ export const ImageViewer = ({ images, initialIndex, isOpen, onClose }: ImageView
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const touchStartRef = useRef<{ dist: number; zoom: number; center: { x: number; y: number } } | null>(null);
 
   const handleZoomIn = () => {
     setZoom(prev => Math.min(prev + 0.5, 3));
@@ -90,6 +91,59 @@ export const ImageViewer = ({ images, initialIndex, isOpen, onClose }: ImageView
     }
   };
 
+  const getDistance = (touch1: React.Touch, touch2: React.Touch) => {
+    const dx = touch1.clientX - touch2.clientX;
+    const dy = touch1.clientY - touch2.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  const getCenter = (touch1: React.Touch, touch2: React.Touch) => {
+    return {
+      x: (touch1.clientX + touch2.clientX) / 2,
+      y: (touch1.clientY + touch2.clientY) / 2
+    };
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const dist = getDistance(e.touches[0], e.touches[1]);
+      const center = getCenter(e.touches[0], e.touches[1]);
+      touchStartRef.current = { dist, zoom, center };
+    } else if (e.touches.length === 1 && zoom > 1) {
+      setIsDragging(true);
+      setDragStart({
+        x: e.touches[0].clientX - position.x,
+        y: e.touches[0].clientY - position.y
+      });
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2 && touchStartRef.current) {
+      e.preventDefault();
+      const dist = getDistance(e.touches[0], e.touches[1]);
+      const scale = dist / touchStartRef.current.dist;
+      const newZoom = Math.min(Math.max(touchStartRef.current.zoom * scale, 0.5), 3);
+      
+      setZoom(newZoom);
+      
+      if (newZoom <= 1) {
+        setPosition({ x: 0, y: 0 });
+      }
+    } else if (e.touches.length === 1 && isDragging && zoom > 1) {
+      setPosition({
+        x: e.touches[0].clientX - dragStart.x,
+        y: e.touches[0].clientY - dragStart.y
+      });
+    }
+  };
+
+  const handleTouchEnd = () => {
+    touchStartRef.current = null;
+    setIsDragging(false);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none [&>button]:text-white [&>button]:hover:bg-white/20">
@@ -150,12 +204,15 @@ export const ImageViewer = ({ images, initialIndex, isOpen, onClose }: ImageView
 
         {/* Image Container */}
         <div 
-          className="w-full h-[95vh] overflow-hidden flex items-center justify-center touch-none"
+          className="w-full h-[95vh] overflow-hidden flex items-center justify-center"
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseLeave}
           onWheel={handleWheel}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           style={{ 
             cursor: zoom > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default',
             touchAction: 'none'

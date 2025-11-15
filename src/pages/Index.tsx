@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from "react";
+import { useState, lazy, Suspense, useEffect } from "react";
 import { Navigation } from "@/components/ui/navigation";
 import { HomePage } from "@/components/HomePage";
 import { AuthPage } from "@/components/AuthPage";
@@ -9,6 +9,7 @@ import { useFavorites } from "@/hooks/useFavorites";
 import { useCommunityStats } from "@/hooks/useCommunityStats";
 import { useToast } from "@/hooks/use-toast";
 import { useMessageNotifications } from "@/hooks/useMessageNotifications";
+import { App } from '@capacitor/app';
 
 // Lazy load less critical pages for better initial load
 const CreateListingPage = lazy(() => import("@/components/CreateListingPage").then(m => ({ default: m.CreateListingPage })));
@@ -54,6 +55,21 @@ const Index = () => {
   
   // Set up global message notifications
   useMessageNotifications({ currentConversationId: null });
+
+  // Handle Android back button
+  useEffect(() => {
+    const handleBackButton = App.addListener('backButton', () => {
+      if (navigationHistory.length > 1) {
+        navigateBack();
+      } else {
+        App.exitApp();
+      }
+    });
+
+    return () => {
+      handleBackButton.then(listener => listener.remove());
+    };
+  }, [navigationHistory]);
 
   // Navigation helper functions
   const navigateTo = (page: string, data?: any) => {
