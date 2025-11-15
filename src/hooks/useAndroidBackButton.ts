@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-//import { App } from '@capacitor/app';
+import { App } from '@capacitor/app';
 
 export const useAndroidBackButton = (onBackButton: () => boolean) => {
   useEffect(() => {
